@@ -2,19 +2,19 @@
   <tm-app>
     <!--    出发地到目的地地图-->
     <map
-      v-show="takeCarInfo?.orderInfo.orderStatus > OrderStatus.ACCEPTED"
-      :key="1"
-      id="map"
-      class="map"
-      :longitude="takeCarInfo.from.longitude"
-      :latitude="takeCarInfo.from.latitude"
-      :polyline="takeCarInfo.RouteInfo.polyline"
-      :markers="takeCarInfo.RouteInfo.markers"
-      scale="12"
-      :enable-traffic="false"
-      :show-location="true"
-      :enable-poi="true"
-      :enable-3D="true"
+        v-show="takeCarInfo?.orderInfo.orderStatus > OrderStatus.ACCEPTED"
+        :key="1"
+        id="map"
+        class="map"
+        :longitude="takeCarInfo.from.longitude"
+        :latitude="takeCarInfo.from.latitude"
+        :polyline="takeCarInfo.RouteInfo.polyline"
+        :markers="takeCarInfo.RouteInfo.markers"
+        scale="12"
+        :enable-traffic="false"
+        :show-location="true"
+        :enable-poi="true"
+        :enable-3D="true"
     >
       <cover-view @click="moveCurrentHandle()" class="location">
         <theme-icon custom-prefix="iconfont" type="iconfontditudingwei" size="30"></theme-icon>
@@ -22,19 +22,19 @@
     </map>
     <!--    司机到乘客路线地图-->
     <map
-      v-show="takeCarInfo?.orderInfo.orderStatus <= OrderStatus.ACCEPTED"
-      :key="2"
-      id="driveMap"
-      class="map"
-      :longitude="takeCarInfo.carInfo.from.longitude"
-      :latitude="takeCarInfo.carInfo.from.latitude"
-      :polyline="takeCarInfo.carInfo.RouteInfo.polyline"
-      :markers="takeCarInfo.carInfo.RouteInfo.markers"
-      scale="12"
-      :enable-traffic="false"
-      :show-location="true"
-      :enable-poi="true"
-      :enable-3D="true"
+        v-show="takeCarInfo?.orderInfo.orderStatus <= OrderStatus.ACCEPTED"
+        :key="2"
+        id="driveMap"
+        class="map"
+        :longitude="takeCarInfo.carInfo.from.longitude"
+        :latitude="takeCarInfo.carInfo.from.latitude"
+        :polyline="takeCarInfo.carInfo.RouteInfo.polyline"
+        :markers="takeCarInfo.carInfo.RouteInfo.markers"
+        scale="12"
+        :enable-traffic="false"
+        :show-location="true"
+        :enable-poi="true"
+        :enable-3D="true"
     >
       <cover-view @click="moveCurrentHandle()" class="location">
         <theme-icon custom-prefix="iconfont" type="iconfontditudingwei" size="30"></theme-icon>
@@ -54,11 +54,11 @@
             </template>
             <template #right>
               <uni-icons
-                @click="openExternalMapHandle(takeCarInfo.from)"
-                custom-prefix="iconfont"
-                class="mr-10"
-                type="iconfontditu"
-                size="30"
+                  @click="openExternalMapHandle(takeCarInfo.from)"
+                  custom-prefix="iconfont"
+                  class="mr-10"
+                  type="iconfontditu"
+                  size="30"
               ></uni-icons>
               <uni-icons @click="callPhoneHandle" custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
             </template>
@@ -71,12 +71,12 @@
           <!--          </tm-cell>-->
         </view>
         <loading-button
-          :block="true"
-          :click-fun="reachTheStartingPointHandle"
-          :margin="[10]"
-          :shadow="0"
-          size="large"
-          label="到达乘客起点"
+            :block="true"
+            :click-fun="reachTheStartingPointHandle"
+            :margin="[10]"
+            :shadow="0"
+            size="large"
+            label="到达乘客起点"
         ></loading-button>
       </tm-sheet>
     </view>
@@ -94,11 +94,11 @@
             </template>
             <template #right>
               <uni-icons
-                @click="openExternalMapHandle(takeCarInfo.from)"
-                custom-prefix="iconfont"
-                class="mr-10"
-                type="iconfontditu"
-                size="30"
+                  @click="openExternalMapHandle(takeCarInfo.from)"
+                  custom-prefix="iconfont"
+                  class="mr-10"
+                  type="iconfontditu"
+                  size="30"
               ></uni-icons>
               <uni-icons @click="callPhoneHandle" custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
             </template>
@@ -121,11 +121,11 @@
             </template>
             <template #right>
               <uni-icons
-                @click="openExternalMapHandle(takeCarInfo.from)"
-                custom-prefix="iconfont"
-                class="mr-10"
-                type="iconfontditu"
-                size="30"
+                  @click="openExternalMapHandle(takeCarInfo.from)"
+                  custom-prefix="iconfont"
+                  class="mr-10"
+                  type="iconfontditu"
+                  size="30"
               ></uni-icons>
               <uni-icons @click="callPhoneHandle" custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
             </template>
@@ -148,11 +148,11 @@
             </template>
             <template #right>
               <uni-icons
-                @click="openExternalMapHandle(takeCarInfo.to)"
-                custom-prefix="iconfont"
-                class="mr-10"
-                type="iconfontditu"
-                size="30"
+                  @click="openExternalMapHandle(takeCarInfo.to)"
+                  custom-prefix="iconfont"
+                  class="mr-10"
+                  type="iconfontditu"
+                  size="30"
               ></uni-icons>
               <uni-icons @click="callPhoneHandle" custom-prefix="iconfont" type="iconfontdianhua" size="30"></uni-icons>
             </template>
@@ -283,43 +283,46 @@ async function getOrderInfoHandleByOrderId(orderId: number | string) {
   takeCarInfo.setOrderStatus(res.data.status)
   // 设置司机位置信息
   // todo 地址位置写死：昌平区政府
-  // uni.getLocation({
-  //   type: 'gcj02',
-  //   success: (res) => {
-  //     takeCarInfo.setCarFrom({
-  //       // longitude: res.longitude,
-  //       // latitude: res.latitude
-  //       address: '',
-  //       longitude: 116.23128,
-  //       latitude: 40.22077
-  //     })
-  //   }
-  // })
-  takeCarInfo.setCarFrom({
-    // longitude: res.longitude,
-    // latitude: res.latitude
-    address: '',
-    longitude: 116.23128,
-    latitude: 40.22077
+  uni.getLocation({
+    type: 'gcj02',
+    success: async (res2) => {
+      takeCarInfo.setCarFrom({
+        address: '',
+        longitude: res2.longitude,
+        latitude: res2.latitude
+        // longitude: 116.23128,
+        // latitude: 40.22077
+      })
+      // 如果状态为等于已接单的状态，则显示司机位置->开始位置的地图
+      if (res.data.status === OrderStatus.ACCEPTED) {
+        console.log('司机位置->开始位置的地图')
+        //   设置司机目的地
+        takeCarInfo.setCarTo({
+          address: res.data.startLocation,
+          longitude: res.data.startPointLongitude,
+          latitude: res.data.startPointLatitude
+        })
+        //   执行路径规划
+        await takeCarInfo.driversPickUpPassengersRoutePlan()
+      }
+      // 否则显示出发位置->结束位置的地图
+      else {
+        console.log('出发位置->结束位置的地图')
+        //  执行路径规划
+        await takeCarInfo.routePlan(2)
+      }
+    },
+    fail: (err) => {
+      console.log('设置司机位置信息--getLocation', err)
+    }
   })
-  // 如果状态为等于已接单的状态，则显示司机位置->开始位置的地图
-  if (res.data.status === OrderStatus.ACCEPTED) {
-    console.log('司机位置->开始位置的地图')
-    //   设置司机目的地
-    takeCarInfo.setCarTo({
-      address: res.data.startLocation,
-      longitude: res.data.startPointLongitude,
-      latitude: res.data.startPointLatitude
-    })
-    //   执行路径规划
-    await takeCarInfo.driversPickUpPassengersRoutePlan()
-  }
-  // 否则显示出发位置->结束位置的地图
-  else {
-    console.log('出发位置->结束位置的地图')
-    //  执行路径规划
-    await takeCarInfo.routePlan(2)
-  }
+  // takeCarInfo.setCarFrom({
+  //   // longitude: res.longitude,
+  //   // latitude: res.latitude
+  //   address: '',
+  //   longitude: 116.23128,
+  //   latitude: 40.22077
+  // })
 }
 
 // 订单轮询所需参数
