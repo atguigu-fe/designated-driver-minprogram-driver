@@ -1,14 +1,14 @@
 <template>
   <tm-app>
     <map
-      id="map"
-      :longitude="mapProps.longitude"
-      :latitude="mapProps.latitude"
-      scale="15"
-      :enable-traffic="false"
-      :show-location="true"
-      :enable-poi="true"
-      class="map"
+        id="map"
+        :longitude="mapProps.longitude"
+        :latitude="mapProps.latitude"
+        scale="15"
+        :enable-traffic="false"
+        :show-location="true"
+        :enable-poi="true"
+        class="map"
     >
       <cover-view @click="moveToLocationHandle()" class="location">
         <theme-icon custom-prefix="iconfont" type="iconfontditudingwei" size="30"></theme-icon>
@@ -25,22 +25,22 @@
           </view>
         </view>
         <loading-button
-          v-if="isTakingOrders"
-          :block="true"
-          :click-fun="cancelTakingOrdersHandle"
-          :margin="[10]"
-          :shadow="0"
-          size="large"
-          label="取消接单"
+            v-if="isTakingOrders"
+            :block="true"
+            :click-fun="cancelTakingOrdersHandle"
+            :margin="[10]"
+            :shadow="0"
+            size="large"
+            label="取消接单"
         ></loading-button>
         <loading-button
-          v-if="!isTakingOrders"
-          :block="true"
-          :click-fun="startTakingOrdersHandle"
-          :margin="[10]"
-          :shadow="0"
-          size="large"
-          label="开始接单"
+            v-if="!isTakingOrders"
+            :block="true"
+            :click-fun="startTakingOrdersHandle"
+            :margin="[10]"
+            :shadow="0"
+            size="large"
+            label="开始接单"
         ></loading-button>
       </tm-sheet>
     </view>
@@ -73,13 +73,13 @@
           </view>
           <view class="flex flex-row">
             <loading-button
-              :width="200"
-              :click-fun="cancelTakingOrdersForCustomerHandle"
-              :margin="[30]"
-              :shadow="0"
-              size="large"
-              label="取消"
-              type="info"
+                :width="200"
+                :click-fun="cancelTakingOrdersForCustomerHandle"
+                :margin="[30]"
+                :shadow="0"
+                size="large"
+                label="取消"
+                type="info"
             ></loading-button>
             <loading-button :width="200" :click-fun="confirmTakingOrdersHandle" :margin="[30]" :shadow="0" size="large" label="抢单"></loading-button>
           </view>
@@ -96,8 +96,9 @@ import { useTimeIncrease } from '@/hooks/useTimeIncrease'
 import { useCountdown } from '@/hooks/useCountdown'
 import tmNotification from '@/tmui/components/tm-notification/tm-notification.vue'
 import { useReceiveOrder } from '@/store/modules/receiveOrder'
-import { stopService } from '@/api/order'
+import { searchDriverCurrentOrder, stopService } from '@/api/order'
 import { getDriverIsFaceRecognition, getDriverLoginInfo } from '@/api/user'
+import { getToken } from '@/utils/storage'
 const receiveOrder = useReceiveOrder()
 const descriptionsOrder = computed(() => {
   return [
@@ -181,6 +182,23 @@ async function startTakingOrdersHandle() {
   const isAllowTakeOrder = await isTakeOrder()
   console.log('isAllowTakeOrder', isAllowTakeOrder)
   if (!isAllowTakeOrder) return
+  // 是否存在未完成订单
+  // 判断已经存在订单，如果存在订单，则提示是否去往导航页
+  const { data } = await searchDriverCurrentOrder()
+  if (data.isHasCurrentOrder) {
+    uni.showModal({
+      title: '提示',
+      content: '您有未完成的订单，是否去往导航页？',
+      success: function (res) {
+        if (res.confirm) {
+          uni.navigateTo({
+            url: '/pages/creatOrder/creatOrder?orderId=' + data.orderId
+          })
+        }
+      }
+    })
+    return
+  }
 
   // 开启接单服务
   await receiveOrder.startOrderService()
@@ -262,9 +280,27 @@ async function isTakeOrder() {
 
 //#endregion
 
-onShow(() => {
+onShow(async () => {
   // 隐藏tabbar
   uni.hideTabBar()
+  if (getToken()) {
+    // 判断已经存在订单，如果存在订单，则提示是否去往导航页
+    const { data } = await searchDriverCurrentOrder()
+    if (data.isHasCurrentOrder) {
+      uni.showModal({
+        title: '提示',
+        content: '您有未完成的订单，是否去往导航页？',
+        success: function (res) {
+          if (res.confirm) {
+            uni.navigateTo({
+              url: '/pages/creatOrder/creatOrder?orderId=' + data.orderId
+            })
+          }
+        }
+      })
+      return
+    }
+  }
 })
 onLoad(() => {
   // setTimeout(() => {
