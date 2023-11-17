@@ -17,7 +17,7 @@ export function getLogin(code: string) {
  * @description 获取用户登陆信息
  */
 export function getUserInfo() {
-  return http.get<UserInfoInterface>('/driver/getDriverInfo')
+  return http.get<UserInfoInterface>('/driver/getDriverLoginInfo')
 }
 /**
  * @description 更新用户信息
